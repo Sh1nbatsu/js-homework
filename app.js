@@ -1,15 +1,19 @@
-const div = document.querySelector("#parent-element");
+const parent = document.querySelector("ul");
+
+console.log(parent);
 
 const xhr = new XMLHttpRequest();
 
-xhr.open("GET", "https://jsonplaceholder.typicode.com/todos/1");
+xhr.open("GET", "https://jsonplaceholder.typicode.com/todos");
 
 xhr.onload = () => {
   if (xhr.status >= 200 && xhr.status < 300) {
-    const resoponse = JSON.parse(xhr.responseText);
-    div.innerHTML = `<p>${resoponse.title}</p>`;
+    const response = JSON.parse(xhr.responseText);
+    for (let i = 0; i <= 20; i++) {
+      parent.innerHTML += `<li>${response[i].title}</li>`;
+    }
   } else {
-    console.error("Ошибка при получении запроса", xhr.status);
+    console.error("Ошибка при загрузке данных", xhr.status);
   }
 };
 
