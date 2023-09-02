@@ -1,0 +1,74 @@
+:root {
+  --main-color: rgb(135, 135, 255);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+  font-size: 20px;
+}
+
+.weather-app__wrapper {
+  max-width: 600px;
+  margin: auto;
+}
+
+.weather-app__heading {
+  background-color: var(--main-color);
+  padding: 6px;
+}
+
+.weather-app__heading > * {
+  color: white;
+}
+
+.forecast-item {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid var(--main-color);
+}
+
+.clock {
+  display: flex;
+}
+
+.time {
+  padding: 12px;
+}
+
+.weather {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.speed {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 36px 6px;
+}
+
+.weather-app__forecast-item {
+  display: flex;
+  justify-content: space-between;
+  border: 2px solid var(--main-color);
+  border-top: none;
+  padding: 12px 20px 0;
+}
+
+.weather-app__forecast-item > * {
+  width: fit-content;
+  text-align: left;
+  min-width: 104px;
+}
+
+.weather-app__forecast-item > p {
+  text-align: right;
+}
+
+.icon-img {
+  width: 80px;
+}
