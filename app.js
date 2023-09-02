@@ -96,8 +96,7 @@ xhr.onload = () => {
 
 xhr.open(
   "GET",
-  "https://api.openweathermap.org/data/2.5/forecast?q=Ufa&appid=a94d0a5ac08570add4b47b8da933f247&units=metric"
+  "https://api.openweathermap.org/data/2.5/forecast?q=Minsk&appid=a94d0a5ac08570add4b47b8da933f247&units=metric"
 );
 
-// lon=30.2642$lat=59.8944
 xhr.send();
