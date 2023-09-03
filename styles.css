@@ -9,14 +9,6 @@
   margin: auto;
 }
 
-.user-info {
-  text-align: center;
-  background-color: gainsboro;
-  margin: 12px;
-  max-width: 400px;
-}
-
-.user-info > * {
-  margin: 6px;
-  text-wrap: balance;
+#dailyEmoji {
+  font-size: 48px;
 }

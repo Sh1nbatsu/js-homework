@@ -1,31 +1,42 @@
-const parentElement = document.querySelector(".container");
+const getEmojiBtn = document.querySelector("button");
 
-const xhr = new XMLHttpRequest();
+const dailyEmojiContainer = document.getElementById("dailyEmoji");
 
-function addUserInfo(userInfo, HTMLTag, CSSClass) {
-  const tag = document.createElement(`${HTMLTag}`);
-  tag.classList.add(`${CSSClass}`);
-  tag.textContent = userInfo;
-  return tag;
+const peopleEmojiContainer = document.getElementById("peopleEmoji");
+
+const foodEmojiContainer = document.getElementById("foodEmoji");
+
+const travelEmojiContainer = document.getElementById("travelEmoji");
+
+function distributeEmojisByCategory(emoji) {
+  const categoryName = emoji.category.name;
+  switch (categoryName) {
+    case "Smileys & Emotion":
+      peopleEmojiContainer.innerText += emoji.emoji;
+      break;
+    case "Food & Drink":
+      foodEmojiContainer.innerText += emoji.emoji;
+      break;
+    case "Travel & Places":
+      travelEmojiContainer.innerText += emoji.emoji;
+    default:
+      break;
+  }
 }
 
-xhr.onload = () => {
-  if (xhr.status >= 200 && xhr.status < 300) {
-    const response = JSON.parse(xhr.responseText);
-    console.log(response);
-    for (let i = 0; i <= 9; i++) {
-      const div = document.createElement("div");
-      div.classList.add("user-info");
-      div.appendChild(addUserInfo(response[i].name, "h3", "name"));
-      div.appendChild(addUserInfo(response[i].email, "p", "email"));
-      div.appendChild(addUserInfo(response[i].body, "p", "body"));
-      parentElement.appendChild(div);
-    }
-  } else {
-    console.error("Произошла ошибка при запросе данных с сервера");
-  }
-};
+getEmojiBtn.addEventListener("click", (e) => {
+  fetch(" https://api.emojisworld.fr/v1/random")
+    .then((result) => result.json())
+    .then((parsedResult) => {
+      dailyEmojiContainer.innerText = parsedResult.results[0].emoji;
+    });
+});
 
-xhr.open("GET", "https://jsonplaceholder.typicode.com/comments");
-
-xhr.send();
+fetch("https://api.emojisworld.fr/v1/random")
+  .then((result) => result.json())
+  .then((parsedResult) => {
+    console.log(parsedResult);
+    parsedResult.results.forEach((item) => {
+      distributeEmojisByCategory(item);
+    });
+  });
