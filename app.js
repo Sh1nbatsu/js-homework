@@ -35,7 +35,6 @@ getEmojiBtn.addEventListener("click", (e) => {
 fetch("https://api.emojisworld.fr/v1/random")
   .then((result) => result.json())
   .then((parsedResult) => {
-    console.log(parsedResult);
     parsedResult.results.forEach((item) => {
       distributeEmojisByCategory(item);
     });
