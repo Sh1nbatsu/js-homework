@@ -1,42 +1,48 @@
-const getEmojiBtn = document.querySelector("button");
+const parentElement = document.getElementById("parent");
 
-const dailyEmojiContainer = document.getElementById("dailyEmoji");
+function renderCountryCard(responseItem) {
+  const population = (responseItem.population / 1000000).toFixed(1);
 
-const peopleEmojiContainer = document.getElementById("peopleEmoji");
+  const getLanguages = (languagesObj) => {
+    let languages = [];
+    for (let language in languagesObj) {
+      languages.push(` ${languagesObj[language]}`);
+    }
+    return languages;
+  };
 
-const foodEmojiContainer = document.getElementById("foodEmoji");
+  const getCurrency = (currencyObj) => {
+    let currencyString = "";
+    for (let item in currencyObj) {
+      currencyString += currencyObj[item].symbol;
+      currencyString += ` ${currencyObj[item].name}`;
+    }
+    return currencyString;
+  };
 
-const travelEmojiContainer = document.getElementById("travelEmoji");
-
-function distributeEmojisByCategory(emoji) {
-  const categoryName = emoji.category.name;
-  switch (categoryName) {
-    case "Smileys & Emotion":
-      peopleEmojiContainer.innerText += emoji.emoji;
-      break;
-    case "Food & Drink":
-      foodEmojiContainer.innerText += emoji.emoji;
-      break;
-    case "Travel & Places":
-      travelEmojiContainer.innerText += emoji.emoji;
-    default:
-      break;
-  }
+  parentElement.innerHTML += `
+  <div class="col">
+    <div class="h-100 card">
+      <img src="${responseItem.flags.png}" class="card-img-top"/>
+      <div class="card-body">
+        <h5 class="card-title">${responseItem.name.official}</h5>
+        <p class="card-text">${responseItem.region}</p>
+        <p class="card-text">&#128106 ${population}</p>
+        <p class="card-text">&#128483 ${getLanguages(
+          responseItem.languages
+        )}</p>
+        <p class="card-text">&#128181  ${getCurrency(
+          responseItem.currencies
+        )}</p>
+      </div>
+    </div>
+  </div>`;
 }
 
-getEmojiBtn.addEventListener("click", (e) => {
-  fetch(" https://api.emojisworld.fr/v1/random")
-    .then((result) => result.json())
-    .then((parsedResult) => {
-      dailyEmojiContainer.innerText = parsedResult.results[0].emoji;
-    });
-});
-
-fetch("https://api.emojisworld.fr/v1/random")
+fetch("https://restcountries.com/v3.1/all")
   .then((result) => result.json())
   .then((parsedResult) => {
-    console.log(parsedResult);
-    parsedResult.results.forEach((item) => {
-      distributeEmojisByCategory(item);
-    });
+    for (let i = 0; i < 250; i += 25) {
+      renderCountryCard(parsedResult[i]);
+    }
   });
