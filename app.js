@@ -9,8 +9,7 @@ const foodEmojiContainer = document.getElementById("foodEmoji");
 const travelEmojiContainer = document.getElementById("travelEmoji");
 
 function distributeEmojisByCategory(emoji) {
-  const categoryName = emoji.category.name;
-  switch (categoryName) {
+  switch (emoji.category.name) {
     case "Smileys & Emotion":
       peopleEmojiContainer.innerText += emoji.emoji;
       break;
