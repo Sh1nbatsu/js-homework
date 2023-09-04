@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1400px;
+  margin: auto;
+}
+
+.user-info {
+  text-align: center;
+  background-color: gainsboro;
+  margin: 12px;
+  max-width: 400px;
+}
+
+.user-info > * {
+  margin: 6px;
+  text-wrap: balance;
+}
