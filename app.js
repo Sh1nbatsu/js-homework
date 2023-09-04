@@ -27,7 +27,7 @@ function renderCountryCard(responseItem) {
       <div class="card-body">
         <h5 class="card-title">${responseItem.name.official}</h5>
         <p class="card-text">${responseItem.region}</p>
-        <p class="card-text">&#128106 ${population}</p>
+        <p class="card-text">&#128106 ${population} млн.</p>
         <p class="card-text">&#128483 ${getLanguages(
           responseItem.languages
         )}</p>
