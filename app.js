@@ -102,18 +102,14 @@ fetch("https://restcountries.com/v3.1/name/italy")
     initialParentElement.appendChild(createCountryCard(parsedResult[0], ""));
     return parsedResult;
   })
-  .then((parsedResult) => {
-    parsedResult[0].borders.forEach((country) => {
-      fetch(`https://restcountries.com/v3.1/alpha/${country}`)
-        .then((result) => result.json())
-        .then((parsedResult) => {
-          distr.distributeCards(parsedResult[0]);
-          console.log(parsedResult[0])
-          countryInfos.push(parsedResult[0].area);
-        });
-    });
-  }).then(() => {
-    console.log(countryInfos);
-    console.log(abc)
-    countryInfos.forEach((item) => console.log(item));
-  })
+  .then(async (parsedResult) => {
+    const listOfCodes = parsedResult[0].borders.join(",");
+    console.log(listOfCodes);
+    const response = await fetch(
+      `https://restcountries.com/v3.1/alpha?codes=${listOfCodes}`
+    );
+    const result = await response.json();
+    result.forEach((country) => distr.distributeCards(country));
+    console.log(result);
+  });
+
