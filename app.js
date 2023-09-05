@@ -1,40 +1,119 @@
-const getEmojiBtn = document.querySelector("button");
+const rootElement = document.getElementById("root");
 
-const dailyEmojiContainer = document.getElementById("dailyEmoji");
+const initialParentElement = document.getElementById("parent-element");
 
-const peopleEmojiContainer = document.getElementById("peopleEmoji");
+const neighbouringCountryTag = "<p>Neighbouring Country</p>";
 
-const foodEmojiContainer = document.getElementById("foodEmoji");
+const abc = [1, 2, 3];
 
-const travelEmojiContainer = document.getElementById("travelEmoji");
+const countryInfos = [];
 
-function distributeEmojisByCategory(emoji) {
-  switch (emoji.category.name) {
-    case "Smileys & Emotion":
-      peopleEmojiContainer.innerText += emoji.emoji;
-      break;
-    case "Food & Drink":
-      foodEmojiContainer.innerText += emoji.emoji;
-      break;
-    case "Travel & Places":
-      travelEmojiContainer.innerText += emoji.emoji;
-    default:
-      break;
+class cardDistributor {
+  constructor() {
+    this.appendedCards = 0;
+  }
+
+  distributeCards(response) {
+    if (this.appendedCards === 0) {
+      initialParentElement.append(
+        createCountryCard(response, neighbouringCountryTag)
+      );
+    } else if (this.appendedCards === 1) {
+      initialParentElement.prepend(
+        createCountryCard(response, neighbouringCountryTag)
+      );
+    } else if (this.appendedCards === 2) {
+      const flexDiv = document.createElement("div");
+      flexDiv.classList.add(
+        "d-flex",
+        "justify-content-center",
+        "gap-4",
+        "my-5"
+      );
+      flexDiv.append(createCountryCard(response, neighbouringCountryTag));
+      rootElement.append(flexDiv);
+    } else if (this.appendedCards === 3) {
+      const lastParent = document.querySelectorAll(".container > div");
+      lastParent[1].append(createCountryCard(response, neighbouringCountryTag));
+    } else if (this.appendedCards === 4) {
+      const flexDiv = document.createElement("div");
+      flexDiv.classList.add(
+        "d-flex",
+        "justify-content-center",
+        "gap-4",
+        "my-5",
+        "align-items-end"
+      );
+      flexDiv.append(createCountryCard(response, neighbouringCountryTag));
+      rootElement.prepend(flexDiv);
+    } else if (this.appendedCards === 5) {
+      const lastParent = document.querySelectorAll(".container > div");
+      lastParent[0].append(createCountryCard(response, neighbouringCountryTag));
+    }
+    this.appendedCards += 1;
   }
 }
 
-getEmojiBtn.addEventListener("click", (e) => {
-  fetch(" https://api.emojisworld.fr/v1/random")
-    .then((result) => result.json())
-    .then((parsedResult) => {
-      dailyEmojiContainer.innerText = parsedResult.results[0].emoji;
-    });
-});
+const distr = new cardDistributor();
 
-fetch("https://api.emojisworld.fr/v1/random")
+function createCountryCard(countryInfo, additionalHTML) {
+  const div = document.createElement("div");
+
+  div.classList.add("card", "h-75");
+
+  const population = (countryInfo.population / 1000000).toFixed(1);
+
+  const getLanguages = (languagesObj) => {
+    let languages = [];
+    for (let language in languagesObj) {
+      languages.push(` ${languagesObj[language]}`);
+    }
+    return languages;
+  };
+
+  const getCurrency = (currencyObj) => {
+    let currencyString = "";
+    for (let item in currencyObj) {
+      currencyString += currencyObj[item].symbol;
+      currencyString += ` ${currencyObj[item].name}`;
+    }
+    return currencyString;
+  };
+
+  div.innerHTML = `
+      <img src="${countryInfo.flags.png}" class="card-img-top"/>
+      <div class="card-body">
+        <h5 class="card-title">${countryInfo.name.official}</h5>
+        <p class="card-text">${countryInfo.region}</p>
+        <p class="card-text">&#128106 ${population} млн.</p>
+        <p class="card-text">&#128483 ${getLanguages(countryInfo.languages)}</p>
+        <p class="card-text">&#128181  ${getCurrency(
+          countryInfo.currencies
+        )}</p>
+        ${additionalHTML}
+      </div>`;
+
+  return div;
+}
+
+fetch("https://restcountries.com/v3.1/name/italy")
   .then((result) => result.json())
   .then((parsedResult) => {
-    parsedResult.results.forEach((item) => {
-      distributeEmojisByCategory(item);
+    initialParentElement.appendChild(createCountryCard(parsedResult[0], ""));
+    return parsedResult;
+  })
+  .then((parsedResult) => {
+    parsedResult[0].borders.forEach((country) => {
+      fetch(`https://restcountries.com/v3.1/alpha/${country}`)
+        .then((result) => result.json())
+        .then((parsedResult) => {
+          distr.distributeCards(parsedResult[0]);
+          console.log(parsedResult[0])
+          countryInfos.push(parsedResult[0].area);
+        });
     });
-  });
+  }).then(() => {
+    console.log(countryInfos);
+    console.log(abc)
+    countryInfos.forEach((item) => console.log(item));
+  })
